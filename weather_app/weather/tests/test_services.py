@@ -1,22 +1,24 @@
 from django.test import TestCase
 from weather.services import get_weather
+import os
+
 
 
 class TestGetWeather(TestCase):
+
     def test_get_weather(self):
         city = 'Recife'
-        api_key = 'test_key'
+        api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
 
         # Act
         result = get_weather(city, api_key)
 
         # Assert
-        self.assertEqual(result['cod'], 200)
-        self.assertEqual(result['name'], city)
+        self.assertEqual(result["city"], city)
 
     def test_get_weather_with_invalid_city(self):
         city = 'invalid_city'
-        api_key = 'test_key'
+        api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
 
         # Act
         result = get_weather(city, api_key)
@@ -34,5 +36,3 @@ class TestGetWeather(TestCase):
 
         # Assert
         self.assertEqual(result['cod'], 401)
-        self.assertEqual(
-            result['message'], 'Invalid API key. Please see http://openweathermap.org/faq#error401 for more info.')

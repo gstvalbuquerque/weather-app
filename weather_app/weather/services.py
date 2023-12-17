@@ -10,5 +10,13 @@ def get_weather(city, api_key):
     }
 
     response = requests.get(url, params=params)
-    response.raise_for_status()
+    if response.status_code == requests.codes.ok:
+        data = response.json()
+        weather = {
+            "city": data['name'],
+            "temperature": data['main']['temp'],
+            "description": data['weather'][0]['description'],
+            "icon": data['weather'][0]['icon']
+        }
+        return weather
     return response.json()
